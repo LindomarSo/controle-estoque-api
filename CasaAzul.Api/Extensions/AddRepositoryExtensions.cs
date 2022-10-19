@@ -1,7 +1,9 @@
 ﻿using CasaAzul.Domain.Interfaces;
 using CasaAzul.Domain.Models.Identity;
+using CasaAzul.Domain.Uow;
 using CasaAzul.Infra.Context;
 using CasaAzul.Infra.Repository;
+using CasaAzul.Infra.Uow;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,13 +26,17 @@ namespace CasaAzul.Api.Extensions
                 options.Password.RequiredLength = 4;
             })
             .AddRoles<Role>()
-            .AddRoleManager<RoleManager<Role>>()
-            .AddSignInManager<SignInManager<User>>()
-            .AddRoleValidator<RoleValidator<Role>>()
             .AddEntityFrameworkStores<EntityContext>()
+            .AddRoleManager<RoleManager<Role>>()
+            .AddRoleValidator<RoleValidator<Role>>()
+            .AddSignInManager<SignInManager<User>>()
             .AddDefaultTokenProviders(); // Para gerar e atualizar o token
 
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IEntidadeRepository, EntidadeRepository>();
+            services.AddScoped<IDoacaoRepository, DoacaoRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
     }
 }

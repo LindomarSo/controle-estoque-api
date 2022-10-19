@@ -3,6 +3,7 @@ using CasaAzul.Api.Services.Interfaces;
 using CasaAzul.Api.ViewModels;
 using CasaAzul.Domain.Interfaces;
 using CasaAzul.Domain.Models.Identity;
+using CasaAzul.Domain.Uow;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,14 +15,17 @@ namespace CasaAzul.Api.Services
         private readonly SignInManager<User> _signInManager;
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public AccountService(UserManager<User> useManager,
                               SignInManager<User> signInManager,
                               IMapper mapper,
-                              IUserRepository userRepository)
+                              IUserRepository userRepository,
+                              IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
             _userRepository = userRepository;
+            _unitOfWork = unitOfWork;
             _signInManager = signInManager;
             _useManager = useManager;
         }
@@ -47,6 +51,8 @@ namespace CasaAzul.Api.Services
             try
             {
                 var user = _mapper.Map<User>(userView);
+                user.Email = user.Email.ToLower();
+                user.UserName = user.Email;
                 var result = await _useManager.CreateAsync(user, userView.Password);
 
                 if (result.Succeeded)
@@ -63,11 +69,11 @@ namespace CasaAzul.Api.Services
             }
         }
 
-        public async Task<UserUpdateViewModel> GetUserByUserNameAsync(string userName)
+        public async Task<UserUpdateViewModel> GetUserByUserNameAsync(string email)
         {
             try
             {
-                var user = await _userRepository.GetUserByUserNameAsync(userName);
+                var user = await _userRepository.GetUserByUserNameAsync(email);
 
                 if (user == null) return null;
 
@@ -98,14 +104,10 @@ namespace CasaAzul.Api.Services
                     var result = await _useManager.ResetPasswordAsync(user, token, userView.Password);
                 }
 
-                _userRepository.Update<User>(user);
+                _userRepository.Update(user);
 
-                if (await _userRepository.SaveChangesAsync())
-                {
-                    return _mapper.Map<UserUpdateViewModel>(await _userRepository.GetUserByUserNameAsync(user.UserName));
-                }
-
-                return null;
+                await _unitOfWork.CommitAsync();
+                return _mapper.Map<UserUpdateViewModel>(await _userRepository.GetUserByUserNameAsync(user.UserName));
             }
             catch (Exception ex)
             {
@@ -113,12 +115,12 @@ namespace CasaAzul.Api.Services
             }
         }
 
-        public async Task<bool> UserExistAsync(string username)
+        public async Task<bool> UserExistAsync(string email)
         {
             try
             {
                 return await _useManager.Users
-                                            .AnyAsync(user => user.UserName == username.ToLower());
+                                            .AnyAsync(user => user.Email == email.ToLower());
             }
             catch (Exception ex)
             {

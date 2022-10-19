@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CasaAzul.Infra.Migrations
 {
-    public partial class init : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -122,7 +122,7 @@ namespace CasaAzul.Infra.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.RoleId, x.UserId });
+                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
                         column: x => x.RoleId,
@@ -157,6 +157,93 @@ namespace CasaAzul.Infra.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Entidades",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Nome = table.Column<string>(type: "TEXT", nullable: true),
+                    Telefone = table.Column<string>(type: "TEXT", nullable: true),
+                    Email = table.Column<string>(type: "TEXT", nullable: true),
+                    Documento = table.Column<string>(type: "TEXT", nullable: true),
+                    DtNascimento = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    TipoEntidade = table.Column<string>(type: "TEXT", nullable: true),
+                    Escolaridade = table.Column<string>(type: "TEXT", nullable: true),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Entidades", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Entidades_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Doacoes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    MaterialDoado = table.Column<string>(type: "TEXT", nullable: true),
+                    Preco = table.Column<string>(type: "TEXT", nullable: true),
+                    Quantidade = table.Column<int>(type: "INTEGER", nullable: true),
+                    Destino = table.Column<string>(type: "TEXT", nullable: true),
+                    DtEntrada = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    DtRetirada = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    RetiradaPor = table.Column<string>(type: "TEXT", nullable: true),
+                    Disponibilidade = table.Column<string>(type: "TEXT", nullable: true),
+                    Habilidade = table.Column<string>(type: "TEXT", nullable: true),
+                    EntidadeId = table.Column<int>(type: "INTEGER", nullable: false),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Unidade = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Doacoes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Doacoes_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Doacoes_Entidades_EntidadeId",
+                        column: x => x.EntidadeId,
+                        principalTable: "Entidades",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Enderecos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Logradouro = table.Column<string>(type: "TEXT", nullable: true),
+                    CEP = table.Column<string>(type: "TEXT", nullable: true),
+                    Cidade = table.Column<string>(type: "TEXT", nullable: true),
+                    Estado = table.Column<string>(type: "TEXT", nullable: true),
+                    Complemento = table.Column<string>(type: "TEXT", nullable: true),
+                    Numero = table.Column<int>(type: "INTEGER", nullable: true),
+                    EntidadeId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Enderecos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Enderecos_Entidades_EntidadeId",
+                        column: x => x.EntidadeId,
+                        principalTable: "Entidades",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -179,9 +266,9 @@ namespace CasaAzul.Infra.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserRoles_UserId",
+                name: "IX_AspNetUserRoles_RoleId",
                 table: "AspNetUserRoles",
-                column: "UserId");
+                column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
@@ -193,6 +280,27 @@ namespace CasaAzul.Infra.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Doacoes_EntidadeId",
+                table: "Doacoes",
+                column: "EntidadeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Doacoes_UserId",
+                table: "Doacoes",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Enderecos_EntidadeId",
+                table: "Enderecos",
+                column: "EntidadeId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Entidades_UserId",
+                table: "Entidades",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -213,7 +321,16 @@ namespace CasaAzul.Infra.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Doacoes");
+
+            migrationBuilder.DropTable(
+                name: "Enderecos");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Entidades");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

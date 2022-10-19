@@ -17,6 +17,129 @@ namespace CasaAzul.Infra.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.8");
 
+            modelBuilder.Entity("CasaAzul.Domain.Models.Doacao.DoacaoModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Destino")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Disponibilidade")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DtEntrada")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("DtRetirada")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("EntidadeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Habilidade")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MaterialDoado")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Preco")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("Quantidade")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("RetiradaPor")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Unidade")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EntidadeId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Doacoes");
+                });
+
+            modelBuilder.Entity("CasaAzul.Domain.Models.Endereco.EnderecoModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CEP")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Cidade")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Complemento")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("EntidadeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Estado")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Logradouro")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("Numero")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EntidadeId")
+                        .IsUnique();
+
+                    b.ToTable("Enderecos");
+                });
+
+            modelBuilder.Entity("CasaAzul.Domain.Models.Entidade.EntidadeModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Documento")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("DtNascimento")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Escolaridade")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Nome")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Telefone")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TipoEntidade")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Entidades");
+                });
+
             modelBuilder.Entity("CasaAzul.Domain.Models.Identity.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -114,15 +237,15 @@ namespace CasaAzul.Infra.Migrations
 
             modelBuilder.Entity("CasaAzul.Domain.Models.Identity.UserRole", b =>
                 {
-                    b.Property<int>("RoleId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("RoleId", "UserId");
+                    b.Property<int>("RoleId")
+                        .HasColumnType("INTEGER");
 
-                    b.HasIndex("UserId");
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
                 });
@@ -211,6 +334,47 @@ namespace CasaAzul.Infra.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("CasaAzul.Domain.Models.Doacao.DoacaoModel", b =>
+                {
+                    b.HasOne("CasaAzul.Domain.Models.Entidade.EntidadeModel", "Entidade")
+                        .WithMany("Doacoes")
+                        .HasForeignKey("EntidadeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CasaAzul.Domain.Models.Identity.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Entidade");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("CasaAzul.Domain.Models.Endereco.EnderecoModel", b =>
+                {
+                    b.HasOne("CasaAzul.Domain.Models.Entidade.EntidadeModel", "Entidade")
+                        .WithOne("Endereco")
+                        .HasForeignKey("CasaAzul.Domain.Models.Endereco.EnderecoModel", "EntidadeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Entidade");
+                });
+
+            modelBuilder.Entity("CasaAzul.Domain.Models.Entidade.EntidadeModel", b =>
+                {
+                    b.HasOne("CasaAzul.Domain.Models.Identity.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("CasaAzul.Domain.Models.Identity.UserRole", b =>
                 {
                     b.HasOne("CasaAzul.Domain.Models.Identity.Role", "Role")
@@ -264,6 +428,13 @@ namespace CasaAzul.Infra.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CasaAzul.Domain.Models.Entidade.EntidadeModel", b =>
+                {
+                    b.Navigation("Doacoes");
+
+                    b.Navigation("Endereco");
                 });
 
             modelBuilder.Entity("CasaAzul.Domain.Models.Identity.Role", b =>

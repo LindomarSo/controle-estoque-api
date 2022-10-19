@@ -1,4 +1,7 @@
-﻿using CasaAzul.Domain.Models.Identity;
+﻿using CasaAzul.Domain.Models.Doacao;
+using CasaAzul.Domain.Models.Endereco;
+using CasaAzul.Domain.Models.Entidade;
+using CasaAzul.Domain.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -12,13 +15,17 @@ namespace CasaAzul.Infra.Context
         public EntityContext(DbContextOptions<EntityContext> options)
             : base(options) { }
 
+        public DbSet<EntidadeModel> Entidades { get; set; }
+        public DbSet<DoacaoModel> Doacoes { get; set; }
+        public DbSet<EnderecoModel> Enderecos { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
             builder.Entity<UserRole>(userRole => 
             {
-                userRole.HasKey(x => new { x.RoleId, x.UserId });
+                userRole.HasKey(x => new { x.UserId, x.RoleId });
 
                 userRole.HasOne(r => r.Role)
                         .WithMany(ur => ur.UserRoles)

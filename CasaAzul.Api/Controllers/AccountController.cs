@@ -20,7 +20,12 @@ namespace CasaAzul.Api.Controllers
             _tokenService = tokenService;
         }
 
+        /// <summary>
+        /// Pega o usuário logado 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("getUser")]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> GetUser()
         {
             try
@@ -38,13 +43,18 @@ namespace CasaAzul.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Cria um novo usuário 
+        /// </summary>
+        /// <param name="userView"></param>
+        /// <returns></returns>
         [HttpPost("Register")]
-        [AllowAnonymous]
+        [AllowAnonymous] // TODO REMOVER 
         public async Task<IActionResult> Rgister(UserUpdateViewModel userView)
         {
             try
             {
-                if (await _accountService.UserExistAsync(userView.UserName))
+                if (await _accountService.UserExistAsync(userView.Email))
                 {
                     return BadRequest("O usuário já existe!");
                 }
@@ -68,6 +78,11 @@ namespace CasaAzul.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Faz login na plataforma 
+        /// </summary>
+        /// <param name="login"></param>
+        /// <returns></returns>
         [HttpPost("login")]
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel login)
@@ -99,6 +114,11 @@ namespace CasaAzul.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Atualiza informações do usuário
+        /// </summary>
+        /// <param name="userView"></param>
+        /// <returns></returns>
         [HttpPut("UpdateUser")]
         public async Task<IActionResult> UpdateUser(UserUpdateViewModel userView)
         {
