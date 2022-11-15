@@ -19,7 +19,11 @@ namespace CasaAzul.Api.AutoMapper
             CreateMap<User, LoginViewModel>().ReverseMap();
             CreateMap<Role, RoleViewModel>().ReverseMap();
 
-            CreateMap<EntidadeModel, EntidadeViewModel>().ReverseMap();
+            CreateMap<EntidadeModel, EntidadeViewModel>().ForMember(x => x.DtNascimento, (src) =>
+            {
+
+            }).ReverseMap();
+
             CreateMap<EntidadeModel, EntidadeInfoViewModel>().ReverseMap();
             CreateMap<EnderecoModel, EnderecoViewModel>().ReverseMap();
             CreateMap<DoacaoModel, DoacaoViewModel>().ReverseMap();

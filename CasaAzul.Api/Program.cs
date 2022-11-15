@@ -1,4 +1,5 @@
 using CasaAzul.Api.Extensions;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,10 @@ builder.Services.AddRepositoryServices(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
+
+var cultureInfo = new CultureInfo("pt-BR");
+CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
 if (app.Environment.IsDevelopment())
 {

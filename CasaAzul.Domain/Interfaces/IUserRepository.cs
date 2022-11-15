@@ -6,6 +6,6 @@ namespace CasaAzul.Domain.Interfaces
     {
         Task<IEnumerable<User>> GetAllUsersAsync();
         Task<User> GetUserByIdAsync(int id);
-        Task<User> GetUserByUserNameAsync(string username);
+        Task<User> GetUserByUserNameAsync(string email);
     }
 }

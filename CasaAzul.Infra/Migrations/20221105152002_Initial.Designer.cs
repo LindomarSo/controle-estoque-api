@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CasaAzul.Infra.Migrations
 {
     [DbContext(typeof(EntityContext))]
-    [Migration("20221013171924_initial")]
-    partial class initial
+    [Migration("20221105152002_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -121,6 +121,9 @@ namespace CasaAzul.Infra.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Escolaridade")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Habilidade")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Nome")

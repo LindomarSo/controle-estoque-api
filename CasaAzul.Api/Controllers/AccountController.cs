@@ -25,13 +25,13 @@ namespace CasaAzul.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("getUser")]
-        [Authorize(Roles = "Administrador")]
+        [Authorize]
         public async Task<IActionResult> GetUser()
         {
             try
             {
-                var userName = User.GetUserName();
-                var user = await _accountService.GetUserByUserNameAsync(userName);
+                var email = User.GetUserEmail();
+                var user = await _accountService.GetUserByUserNameAsync(email);
 
                 return Ok(user);
             }
@@ -64,7 +64,7 @@ namespace CasaAzul.Api.Controllers
                 return (user != null)
                                     ? Ok(new
                                     {
-                                        UserName = user.UserName,
+                                        UserName = user.Email,
                                         PrimeiroNome = user.NomeCompleto,
                                         token = _tokenService.CreateToken(user).Result
                                     })
@@ -101,8 +101,8 @@ namespace CasaAzul.Api.Controllers
 
                 return Ok(new
                 {
-                    UserName = user.UserName,
-                    PrimeiroNome = user.NomeCompleto,
+                    UserName = user.Email,
+                    NomeCompleto = user.NomeCompleto,
                     token = _tokenService.CreateToken(user).Result
                 });
             }
@@ -124,10 +124,10 @@ namespace CasaAzul.Api.Controllers
         {
             try
             {
-                if (userView.UserName != User.GetUserName())
+                if (userView.Email != User.GetUserEmail())
                     return Unauthorized("Usuário inválido");
 
-                var user = await _accountService.GetUserByUserNameAsync(User.GetUserName());
+                var user = await _accountService.GetUserByUserNameAsync(User.GetUserEmail());
 
                 if (user == null) return Unauthorized("Usuário inválido");
 
@@ -136,7 +136,7 @@ namespace CasaAzul.Api.Controllers
                 return (userRetorno != null)
                                     ? Ok(new
                                     {
-                                        UserName = userRetorno.UserName,
+                                        UserName = userRetorno.Email,
                                         PrimeiroNome = userRetorno.NomeCompleto,
                                         token = _tokenService.CreateToken(userRetorno).Result
                                     })

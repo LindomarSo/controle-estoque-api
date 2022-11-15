@@ -6,8 +6,7 @@ namespace CasaAzul.Domain.Interfaces
     public interface IEntidadeRepository : IEntityBaseRepository<EntidadeModel>
     {
         Task<EntidadeModel> GetEntidadeByIdAsync(int id);
-        Task<PageList<EntidadeModel>> GetAllEntidadesFisicaAsync(PageParams parametros);
-        Task<PageList<EntidadeModel>> GetAllEntidadesJuridicaAsync(PageParams pageParams);
+        Task<PageList<EntidadeModel>> GetAllEntidadesByTypeAsync(PageParams parametros, string pessoa);
         IEnumerable<string> GetEscolaridadeAsync();
         IEnumerable<string> GetTipoEntidadeAsync();
     }

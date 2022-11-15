@@ -24,26 +24,10 @@ namespace CasaAzul.Api.Controllers
         /// </summary>
         /// <param name="pageParams"></param>
         /// <returns></returns>
-        [HttpGet("fisica")]
-        public async Task<IActionResult> GetPessoaFisica([FromQuery]PageParams pageParams)
+        [HttpGet("pessoa/{pessoa}")]
+        public async Task<IActionResult> GetPessoaFisica([FromQuery]PageParams pageParams, string pessoa)
         {
-            var entidades = await _entidadeService.GetAllEntidadesFisicaAsync(pageParams);
-
-            Response.AddPaginationHeader(entidades.PaginaAtual, entidades.TotalItens,
-                                        entidades.TotalPaginas, entidades.TamanhoPagina);
-
-            return Ok(entidades);
-        }
-
-        /// <summary>
-        /// Método responsável por retornar todas as entidades
-        /// </summary>
-        /// <param name="pageParams"></param>
-        /// <returns></returns>
-        [HttpGet("juridica")]
-        public async Task<IActionResult> GetPessoaJuridica([FromQuery]PageParams pageParams)
-        {
-            var entidades = await _entidadeService.GetAllEntidadesJuridicaAsync(pageParams);
+            var entidades = await _entidadeService.GetAllEntidadesBytypeAsync(pageParams, pessoa);
 
             Response.AddPaginationHeader(entidades.PaginaAtual, entidades.TotalItens,
                                         entidades.TotalPaginas, entidades.TamanhoPagina);

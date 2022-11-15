@@ -34,7 +34,8 @@ namespace CasaAzul.Api.Services
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.UserName)
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Name, user.NomeCompleto)
             };
 
             var roles = await _useManager.GetRolesAsync(user);

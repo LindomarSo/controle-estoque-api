@@ -16,11 +16,14 @@ namespace CasaAzul.Infra.Repository
             _context = context;
         }
 
-        public async Task<PageList<EntidadeModel>> GetAllEntidadesFisicaAsync(PageParams parametros)
+        public async Task<PageList<EntidadeModel>> GetAllEntidadesByTypeAsync(PageParams parametros, string pessoa)
         {
+            var person = pessoa.ToLower().Contains("juridica") ? Resources.PESSOA_JURIDICA : Resources.PESSOA_FISICA;
+
             IQueryable<EntidadeModel> query = _context.Entidades
                                                     .Include(entidade => entidade.User)
-                                                    .Where(entidade => entidade.TipoEntidade == Resources.PESSOA_FISICA);
+                                                    .Include(entidade => entidade.Endereco)
+                                                    .Where(entidade => entidade.TipoEntidade == person);
 
             if (!string.IsNullOrEmpty(parametros.Descricao))
                 query = query.Where(x => x.Escolaridade.ToLower().Contains(parametros.Descricao.ToLower())
@@ -29,21 +32,6 @@ namespace CasaAzul.Infra.Repository
                                           || x.Endereco.Cidade.ToLower().Contains(parametros.Descricao.ToLower()));
 
             return await PageList<EntidadeModel>.CreateAsync(query, parametros.NumeroPagina, parametros.TamanhoPagina);
-        }
-
-        public async Task<PageList<EntidadeModel>> GetAllEntidadesJuridicaAsync(PageParams pageParams)
-        {
-            IQueryable<EntidadeModel> query = _context.Entidades
-                                                    .Include(entidade => entidade.User)
-                                                    .Where(entidade => entidade.TipoEntidade == Resources.PESSOA_JURIDICA);
-
-            if (!string.IsNullOrEmpty(pageParams.Descricao))
-                query = query.Where(x => x.Escolaridade.ToLower().Contains(pageParams.Descricao.ToLower())
-                                          || x.Documento == pageParams.Descricao
-                                          || x.Email.ToLower().Contains(pageParams.Descricao.ToLower())
-                                          || x.Endereco.Cidade.ToLower().Contains(pageParams.Descricao.ToLower()));
-
-            return await PageList<EntidadeModel>.CreateAsync(query, pageParams.NumeroPagina, pageParams.TamanhoPagina);
         }
 
         public async Task<EntidadeModel> GetEntidadeByIdAsync(int id)

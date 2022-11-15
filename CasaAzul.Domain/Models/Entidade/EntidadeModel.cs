@@ -11,6 +11,7 @@ namespace CasaAzul.Domain.Models.Entidade
         public string Telefone { get; set; }
         public string Email { get; set; }
         public string Documento { get; set; }
+        public string Habilidade { get; set; }
         public DateTime? DtNascimento { get; set; }
         public string TipoEntidade { get; set; }
         public string Escolaridade { get; set; }

@@ -121,6 +121,9 @@ namespace CasaAzul.Infra.Migrations
                     b.Property<string>("Escolaridade")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Habilidade")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Nome")
                         .HasColumnType("TEXT");
 

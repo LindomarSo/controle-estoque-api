@@ -66,32 +66,11 @@ namespace CasaAzul.Api.Services.CasaAzul
             }
         }
 
-        public async Task<PageList<EntidadeViewModel>> GetAllEntidadesFisicaAsync(PageParams pageParams)
+        public async Task<PageList<EntidadeViewModel>> GetAllEntidadesBytypeAsync(PageParams pageParams, string pessoa)
         {
             try
             {
-                var entidades = await _entidadeRepository.GetAllEntidadesFisicaAsync(pageParams);
-
-                var result = _mapper.Map<PageList<EntidadeViewModel>>(entidades);
-
-                result.TamanhoPagina = entidades.TamanhoPagina;
-                result.TotalPaginas = entidades.TotalPaginas;
-                result.TotalItens = entidades.TotalItens;
-                result.PaginaAtual = entidades.PaginaAtual;
-
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public async Task<PageList<EntidadeViewModel>> GetAllEntidadesJuridicaAsync(PageParams pageParams)
-        {
-            try
-            {
-                var entidades = await _entidadeRepository.GetAllEntidadesJuridicaAsync(pageParams);
+                var entidades = await _entidadeRepository.GetAllEntidadesByTypeAsync(pageParams, pessoa);
 
                 var result = _mapper.Map<PageList<EntidadeViewModel>>(entidades);
 

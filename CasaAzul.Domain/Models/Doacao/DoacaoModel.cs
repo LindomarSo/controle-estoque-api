@@ -1,6 +1,5 @@
 ﻿using CasaAzul.Domain.Models.Entidade;
 using CasaAzul.Domain.Models.Identity;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CasaAzul.Domain.Models.Doacao
 {

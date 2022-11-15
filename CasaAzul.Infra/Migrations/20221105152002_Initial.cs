@@ -1,11 +1,10 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace CasaAzul.Infra.Migrations
 {
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -167,6 +166,7 @@ namespace CasaAzul.Infra.Migrations
                     Telefone = table.Column<string>(type: "TEXT", nullable: true),
                     Email = table.Column<string>(type: "TEXT", nullable: true),
                     Documento = table.Column<string>(type: "TEXT", nullable: true),
+                    Habilidade = table.Column<string>(type: "TEXT", nullable: true),
                     DtNascimento = table.Column<DateTime>(type: "TEXT", nullable: true),
                     TipoEntidade = table.Column<string>(type: "TEXT", nullable: true),
                     Escolaridade = table.Column<string>(type: "TEXT", nullable: true),

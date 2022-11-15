@@ -35,7 +35,7 @@ namespace CasaAzul.Api.Services
             try
             {
                 var user = await _useManager.Users
-                                            .SingleOrDefaultAsync(user => user.UserName == userView.UserName.ToLower());
+                                            .SingleOrDefaultAsync(user => user.Email == userView.Email.ToLower());
 
                 // O parâmetro booleano é passado como falso para que ele não bloquei o usuário caso não bata a senha.
                 return await _signInManager.CheckPasswordSignInAsync(user, password, false);
@@ -90,7 +90,7 @@ namespace CasaAzul.Api.Services
         {
             try
             {
-                var user = await _userRepository.GetUserByUserNameAsync(userView.UserName);
+                var user = await _userRepository.GetUserByUserNameAsync(userView.Email);
 
                 if (user is null) return null;
 
