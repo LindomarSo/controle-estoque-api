@@ -1,5 +1,7 @@
 ﻿using CasaAzul.Domain.Interfaces;
 using CasaAzul.Domain.Models.Identity;
+using CasaAzul.Domain.Notification;
+using CasaAzul.Domain.Notification.Interface;
 using CasaAzul.Domain.Uow;
 using CasaAzul.Infra.Context;
 using CasaAzul.Infra.Repository;
@@ -31,6 +33,8 @@ namespace CasaAzul.Api.Extensions
             .AddRoleValidator<RoleValidator<Role>>()
             .AddSignInManager<SignInManager<User>>()
             .AddDefaultTokenProviders(); // Para gerar e atualizar o token
+
+            services.AddScoped<IDomainNotification, DomainNotification>();
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();

@@ -23,7 +23,8 @@ namespace CasaAzul.Infra.Repository
             IQueryable<EntidadeModel> query = _context.Entidades
                                                     .Include(entidade => entidade.User)
                                                     .Include(entidade => entidade.Endereco)
-                                                    .Where(entidade => entidade.TipoEntidade == person);
+                                                    .Where(entidade => entidade.TipoEntidade == person)
+                                                    .OrderByDescending(x => x.Id);
 
             if (!string.IsNullOrEmpty(parametros.Descricao))
                 query = query.Where(x => x.Escolaridade.ToLower().Contains(parametros.Descricao.ToLower())

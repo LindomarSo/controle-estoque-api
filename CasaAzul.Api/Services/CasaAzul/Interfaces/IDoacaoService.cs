@@ -8,6 +8,7 @@ namespace CasaAzul.Api.Services.CasaAzul.Interfaces
         Task<PageList<DoacaoViewModel>> GetAllDoacoesAsync(PageParams pageParams);
         Task<DoacaoViewModel> GetDoacaoByIdAsync(int id);
         Task<IEnumerable<DoacaoViewModel>> AddAsync(IEnumerable<DoacaoViewModel> doacao, int userId);
+        Task<DoacaoViewModel> UpdateAsync(DoacaoViewModel doacao, int userId);
         IEnumerable<string> GetUnidades();
     }
 }

@@ -33,20 +33,6 @@ namespace CasaAzul.Api.Services.CasaAzul
                         _doacaoRepository.Add(_mapper.Map<DoacaoModel>(item));
                         _unitOfWork.Commit();
                     }
-                    else
-                    {
-                        var model = await _doacaoRepository.GetAsync(x => x.Id == item.Id);
-
-                        if(model != null)
-                        {
-                            var result = _mapper.Map(item, model);
-
-                            result.UserId = userId;
-
-                            _doacaoRepository.Update(result);
-                            _unitOfWork.Commit();
-                        }
-                    }
                 }
 
                 return _mapper.Map<IEnumerable<DoacaoViewModel>>(
@@ -99,6 +85,23 @@ namespace CasaAzul.Api.Services.CasaAzul
         public IEnumerable<string> GetUnidades()
         {
             return _doacaoRepository.GetUnidades();
+        }
+
+        public async Task<DoacaoViewModel> UpdateAsync(DoacaoViewModel doacao, int userId)
+        {
+            var model = await _doacaoRepository.GetAsync(x => x.Id == doacao.Id);
+
+            if (model != null)
+            {
+                var result = _mapper.Map(doacao, model);
+
+                result.UserId = userId;
+
+                _doacaoRepository.Update(result);
+                _unitOfWork.Commit();
+            }
+
+            return _mapper.Map<DoacaoViewModel>(model);
         }
     }
 }

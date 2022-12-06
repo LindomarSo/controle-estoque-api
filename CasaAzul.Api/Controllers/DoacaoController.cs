@@ -66,5 +66,16 @@ namespace CasaAzul.Api.Controllers
         {
             return Ok(await _doacaoService.AddAsync(doacao, User.GetUserId()));
         }
+
+        /// <summary>
+        /// Método responsável por criar uma nova doação
+        /// </summary>
+        /// <param name="doacao"></param>
+        /// <returns></returns>
+        [HttpPut()]
+        public async Task<IActionResult> Put(DoacaoViewModel doacao)
+        {
+            return Ok(await _doacaoService.UpdateAsync(doacao, User.GetUserId()));
+        }
     }
 }
