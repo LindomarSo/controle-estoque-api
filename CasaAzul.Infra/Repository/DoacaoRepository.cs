@@ -20,7 +20,8 @@ namespace CasaAzul.Infra.Repository
         {
             IQueryable<DoacaoModel> query = _context.Doacoes
                                                     .Include(doacao => doacao.Entidade)
-                                                    .Include(doacao => doacao.User);
+                                                    .Include(doacao => doacao.User)
+                                                    .OrderByDescending(d => d.Id);
                                                               
 
             return await PageList<DoacaoModel>.CreateAsync(query, parametros.NumeroPagina, parametros.TamanhoPagina);

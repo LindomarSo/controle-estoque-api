@@ -31,7 +31,7 @@ namespace CasaAzul.Api.Controllers
 
             Response.AddPaginationHeader(doacoes.PaginaAtual, doacoes.TotalItens, doacoes.TotalPaginas, doacoes.TamanhoPagina);
              
-            return Ok(doacoes.OrderByDescending(x => x.Id).ToList());
+            return Ok(doacoes);
         }
 
         /// <summary>
